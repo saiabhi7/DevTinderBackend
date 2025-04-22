@@ -1,0 +1,23 @@
+{
+  "name": "devtinderbackend",
+  "version": "1.0.0",
+  "description": "DevTinder Backend Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saiabhi7/DevTinderBackend.git"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript"
+  ],
+  "author": "Sai Kumar Gottemukkula",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/saiabhi7/DevTinderBackend/issues"
+  },
+  "homepage": "https://github.com/saiabhi7/DevTinderBackend#readme"
+}
