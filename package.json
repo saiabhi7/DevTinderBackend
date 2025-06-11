@@ -4,6 +4,8 @@
   "description": "DevTinder Backend Service",
   "main": "index.js",
   "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +21,13 @@
   "bugs": {
     "url": "https://github.com/saiabhi7/DevTinderBackend/issues"
   },
-  "homepage": "https://github.com/saiabhi7/DevTinderBackend#readme"
+  "homepage": "https://github.com/saiabhi7/DevTinderBackend#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
+    "validator": "^13.15.15"
+  }
 }
