@@ -3,10 +3,12 @@ const dbConnection = require("./config/database");
 const User = require("./models/user");
 const auth = require("./middlewares/auth");
 const requestValid = require("./middlewares/requestValid");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const userAuth = require("./middlewares/userAuth");
+const authRouter = require("./routes/auth");
+const profileRouter = require("./routes/profile");
+const connectionRequestRouter = require("./routes/connectionRequest");
+const feedRouter = require("./routes/feed");
 
 const app = express();
 const port = 3000;
@@ -15,105 +17,12 @@ const port = 3000;
 app.use(express.json());
 app.use(cookieParser());
 
-app.post("/user/signup", requestValid, async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    username,
-    email,
-    password,
-    mobile,
-    photoUrl,
-    dateOfBirth,
-    about,
-    skills,
-    age,
-    gender,
-  } = req.body;
-  const user = new User({
-    firstName,
-    lastName,
-    username,
-    email,
-    password,
-    mobile,
-    photoUrl,
-    dateOfBirth,
-    about,
-    skills,
-    age,
-    gender,
-  });
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", connectionRequestRouter);
+app.use("/", feedRouter);
 
-  try {
-    //Encrypt Password before saving in DB
-    const passwordHash = User.encryptPassword(password);
-
-    user.password = passwordHash;
-    user.email = user.email.toLowerCase(); // Ensure email is stored in lowercase
-
-    await user.save();
-    res.status(201).send("User created successfully!!!");
-  } catch (err) {
-    res
-      .status(400)
-      .send(
-        "Error creating user: " + user.email + " with error: " + err.message
-      );
-  }
-});
-
-app.post("/user/login", async (req, res) => {
-  const { username, email, password } = req.body;
-  let user = null;
-  if (!username && !email) {
-    res.status(400).send("Please provide email or username");
-  } else if (!password) {
-    res.status(400).send("Please provide password");
-  }
-  try {
-    if (email) {
-      user = await User.findOne({ email: email.toLowerCase() });
-    } else if (username) {
-      user = await User.findOne({ username });
-    }
-
-    if (!user) {
-      throw new Error("Invalid Credentials");
-    }
-
-    const isPasswordValid = await user.isValidPassword(password);
-
-    if (!isPasswordValid) {
-      throw new Error("Invalid Credentials");
-    }
-
-    const jwtToken = await jwt.sign(
-      {
-        userId: user._id,
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
-      "DevTinder@Saiabhi17",
-      {
-        algorithm: "HS256",
-        expiresIn: "8h",
-        issuer: "DevTinder",
-      }
-    );
-
-    res.cookie("token", jwtToken, {
-      httpOnly: true,
-      expires: new Date(Date.now() + 8 * 60 * 60 * 1000),
-    });
-    res.send("User logged in successfully!!!");
-  } catch (err) {
-    res.status(400).send("Error logging in user : " + err.message);
-  }
-});
-
+// Test APIs
 app.get("/user/profile", userAuth, async (req, res) => {
   try {
     const user = req.user;

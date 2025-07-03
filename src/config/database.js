@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
+const { MONGO_DB_URL } = require("../constants/constants");
 
 const dbConnection = async () => {
-  await mongoose.connect(
-    "mongodb+srv://namastenode:dzDRIUKR7ue2ZdEL@namastenode.o4b9i.mongodb.net/devTinder"
-  );
+  await mongoose.connect(MONGO_DB_URL);
 };
 
 module.exports = dbConnection;

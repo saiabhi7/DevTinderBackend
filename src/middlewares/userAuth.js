@@ -5,7 +5,12 @@ const userAuth = async (req, res, next) => {
   const { token } = req.cookies;
 
   if (!token) {
-    res.status(401).send("User is not Authorized as token is not present");
+    return res
+      .status(401)
+      .json({
+        message: "User is not Authorized as token is not present",
+        data: {},
+      });
   }
 
   try {
@@ -23,11 +28,19 @@ const userAuth = async (req, res, next) => {
       throw new Error("User not found");
     }
 
+    delete user.password;
+    delete user.__v;
+
     req.user = user;
 
     next();
   } catch (err) {
-    res.status(400).send("Error in user authentication: " + err.message);
+    return res
+      .status(400)
+      .json({
+        message: "Error in user authentication: " + err.message,
+        data: {},
+      });
   }
 };
 
